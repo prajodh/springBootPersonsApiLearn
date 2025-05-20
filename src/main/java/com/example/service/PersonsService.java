@@ -35,4 +35,16 @@ public class PersonsService {
         personsRepository.deleteById(id);
         return "Deleted person";
     }
+
+    public Persons updatePersonById(Persons person, Integer id){
+        return personsRepository.findById(id).map(per->{
+            per.setName(person.getName());
+            per.setAge(person.getAge());
+            per.setSex(person.getSex());
+            return personsRepository.save(per);
+        })
+        .orElseGet(()->{
+            return personsRepository.save(person);
+    });
+    }
 }

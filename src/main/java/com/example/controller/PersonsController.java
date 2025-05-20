@@ -4,17 +4,23 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import com.example.model.Persons;
 import com.example.service.PersonsService;
+
+import io.swagger.v3.oas.annotations.Operation;
+
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+
 
 
 
@@ -25,23 +31,37 @@ public class PersonsController {
     private PersonsService personsService;
 
     @PostMapping
-    public @ResponseBody Persons addPersons(@RequestBody Persons person){
-        return personsService.savePerson(person);
+    @Operation(summary = "api to create a new person record")
+    public @ResponseBody ResponseEntity<Persons> addPersons(@RequestBody Persons person){
+        return ResponseEntity.ok().body(personsService.savePerson(person));
     }
 
     @GetMapping("/{id}")
-    public @ResponseBody Optional<Persons> getPersonById(@PathVariable Integer id) {
-        return personsService.findPersonById(id);
+    @Operation(summary = "api to get a person using their unique")
+    public @ResponseBody ResponseEntity<Persons> getPersonById(@PathVariable Integer id) {
+        Optional<Persons> persons = personsService.findPersonById(id);
+        if (persons.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok().body(persons.get());
     }
-    
+
+   @PutMapping("/{id}")
+   @Operation(summary = "api to update a persons record using their unique id")
+   public ResponseEntity<Persons> updatePersonsById(@RequestBody Persons persons,@PathVariable Integer id) {
+       
+       return ResponseEntity.ok().body(personsService.updatePersonById(persons, id));
+   } 
 
     @GetMapping
-    public @ResponseBody Page<Persons> getAllPersons(@RequestParam Integer page, @RequestParam Integer pageSize){
-        return personsService.findAllPerson(page, pageSize);
+    @Operation(summary = "api to get all persons")
+    public @ResponseBody ResponseEntity<Page<Persons>> getAllPersons(@RequestParam Integer page, @RequestParam Integer pageSize){
+        return ResponseEntity.ok().body(personsService.findAllPerson(page, pageSize));
     }
 
     @DeleteMapping("/{id}")
-    public @ResponseBody String deletePerson(@PathVariable Integer id){
-        return personsService.deletePerson(id);    
+    @Operation(summary = "api to delete a person by their unique id")
+    public @ResponseBody ResponseEntity<String> deletePerson(@PathVariable Integer id){
+        return ResponseEntity.ok().body(personsService.deletePerson(id));    
     }
 }
