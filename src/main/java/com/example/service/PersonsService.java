@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.model.Persons;
 import com.example.repository.PersonsRepository;
+import java.util.List;
 
 @Service
 public class PersonsService {
@@ -34,6 +35,10 @@ public class PersonsService {
     public String deletePerson(Integer id){
         personsRepository.deleteById(id);
         return "Deleted person";
+    }
+
+    public List<Persons> getAllAboveAge(){
+        return personsRepository.findAllAboveAge();
     }
 
     public Persons updatePersonById(Persons person, Integer id){

@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
-
+import java.util.List;
 
 
 
@@ -63,5 +63,11 @@ public class PersonsController {
     @Operation(summary = "api to delete a person by their unique id")
     public @ResponseBody ResponseEntity<String> deletePerson(@PathVariable Integer id){
         return ResponseEntity.ok().body(personsService.deletePerson(id));    
+    }
+
+    @GetMapping("/above-age")
+    @Operation(summary = "api to get all users above the drinking age")
+    public @ResponseBody ResponseEntity<List<Persons>> getAllAboveAge(){
+        return ResponseEntity.ok().body(personsService.getAllAboveAge());
     }
 }
