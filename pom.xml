@@ -12,6 +12,11 @@
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>3.4.5</version>
 	</parent>
+<properties>
+   <docker.image.prefix>prajuinfo.azurecr.io</docker.image.prefix> <!-- Replace with your ACR name -->
+   <java.version>17</java.version>
+   <jib-maven-plugin.version>3.4.0</jib-maven-plugin.version> <!-- Use a modern version to support Java 17 -->
+</properties>
 
     <dependencies>
 	<dependency>
@@ -60,6 +65,23 @@
           </execution>
         </executions>
       </plugin>
+      <plugin>
+  <groupId>com.google.cloud.tools</groupId>
+  <artifactId>jib-maven-plugin</artifactId>
+  <version>${jib-maven-plugin.version}</version>
+  <configuration>
+    <from>
+      <image>mcr.microsoft.com/openjdk/jdk:17-ubuntu</image> <!-- Java 17 base image -->
+    </from>
+    <to>
+      <image>${docker.image.prefix}/${project.artifactId}</image>
+    </to>
+    <container>
+      <mainClass>com.example.MyApplication</mainClass> <!-- Replace with your actual main class -->
+    </container>
+  </configuration>
+</plugin>
+
     </plugins>
   </build>
 

@@ -1,0 +1,43 @@
+name: Docker Image CI for GHCR
+
+on:
+  pull_request:
+    branches:
+      - main
+    types:
+      - closed
+
+jobs:
+  build_and_publish:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Build Spring Boot Application
+        run: mvn clean package -DskipTests
+
+      - name: Login to GitHub Container Registry
+        run: echo "${{ secrets.ART_1 }}" | docker login ghcr.io -u prajodhpragath --password-stdin
+
+      - name: Build and Push to GHCR
+        run: |
+          docker build -t ghcr.io/prajodh/spring-boot:latest --file Dockerfile .
+          docker push ghcr.io/prajodh/spring-boot:latest
+
+      - name: Login to Azure Container Registry
+        run: echo "${{ secrets.AZURE_CONTAINER }}" | docker login prajuinfo.azurecr.io --username prajodh --password-stdin
+
+      - name: Tag and Push to Azure Container Registry
+        run: |
+          docker tag ghcr.io/prajodh/spring-boot:latest prajuinfo.azurecr.io/spring-boot:latest
+          docker push prajuinfo.azurecr.io/spring-boot:latest
+
