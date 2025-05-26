@@ -1,5 +1,4 @@
 name: Docker Image CI for GHCR
-#
 on:
   pull_request:
     branches:
@@ -26,7 +25,7 @@ jobs:
         run: mvn clean package -DskipTests
 
       - name: Login to GitHub Container Registry
-        run: docker login -u prajodh --password ${{secrets.ART_2}} ghrc.io 
+        run: echo "${{ secrets.ART_1 }}" | docker login ghcr.io -u prajodhpragath --password-stdin
 
       - name: Build and Push to GHCR
         run: |
@@ -34,7 +33,7 @@ jobs:
           docker push ghcr.io/prajodh/spring-boot:latest
 
       - name: Login to Azure Container Registry
-        run: docker login  --username prajodh --password ${{secrets.ART_2}} prajuinfo.azurecr.io
+        run: echo "${{ secrets.ART_1 }}" | docker login prajuinfo.azurecr.io --username prajodhpragath --password-stdin
 
       - name: Tag and Push to Azure Container Registry
         run: |
