@@ -26,7 +26,7 @@ jobs:
         run: mvn clean package -DskipTests
 
       - name: Login to GitHub Container Registry
-        run: echo "${{ secrets.ART_1 }}" | docker login ghcr.io -u prajodhpragath --password-stdin
+        run: docker login -u prajodh --password ${{secrets.ART_1}} ghrc.io 
 
       - name: Build and Push to GHCR
         run: |
@@ -34,7 +34,7 @@ jobs:
           docker push ghcr.io/prajodh/spring-boot:latest
 
       - name: Login to Azure Container Registry
-        run: echo "${{ secrets.ART_1 }}" | docker login prajuinfo.azurecr.io --username prajodh --password-stdin
+        run: docker login  --username prajodh --password ${{secrets.ART_1}} prajuinfo.azurecr.io
 
       - name: Tag and Push to Azure Container Registry
         run: |
