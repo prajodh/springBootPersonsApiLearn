@@ -33,7 +33,7 @@ jobs:
           docker push ghcr.io/prajodh/spring-boot:latest
 
       - name: Login to Azure Container Registry
-        run: echo "${{ secrets.AZURE }}" | docker login prajuinfo.azurecr.io --username prajodh --password-stdin
+        run: echo "${{ secrets.AZURE }}" | docker login prajuinfo.azurecr.io --username prajuinfo --password-stdin
 
       - name: Tag and Push to Azure Container Registry
         run: |
