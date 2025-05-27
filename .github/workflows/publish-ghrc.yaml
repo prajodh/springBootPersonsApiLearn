@@ -55,7 +55,7 @@ jobs:
 
       - name: Deploy to AKS
         run: |
-          kubectl set image deployment/gs-spring-boot-docker spring-boot=prajuinfo.azurecr.io/spring-boot:latest
+          kubectl set image deployment/gs-spring-boot-docker gs-spring-boot-docker=prajuinfo.azurecr.io/spring-boot:latest
           kubectl rollout status deployment/gs-spring-boot-docker
 
 
