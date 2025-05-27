@@ -51,11 +51,11 @@ jobs:
 
       - name: Create spring-boot deployment if it doesn't exist
         run: |
-          kubectl get deployment spring-boot || kubectl apply -f app.yaml
+          kubectl get deployment gs-spring-boot-docker || kubectl apply -f app.yaml
 
       - name: Deploy to AKS
         run: |
-          kubectl set image deployment/spring-boot spring-boot=prajuinfo.azurecr.io/spring-boot:latest
-          kubectl rollout status deployment/spring-boot
+          kubectl set image deployment/gs-spring-boot-docker spring-boot=prajuinfo.azurecr.io/spring-boot:latest
+          kubectl rollout status deployment/gs-spring-boot-docker
 
 
