@@ -38,14 +38,12 @@ jobs:
         run: |
           docker tag spring-boot:latest prajuinfo.azurecr.io/spring-boot:latest
           docker push prajuinfo.azurecr.io/spring-boot:latest
-
+      
       - name: Azure Login
-        uses: azure/login@v1
+        uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZURE_CLIENT_ID }}
-          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-          client-secret: ${{ secrets.AZURE_CLIENT_SECRET }}
-          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
 
 
       - name: Get AKS Credentials
