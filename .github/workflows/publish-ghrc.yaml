@@ -49,6 +49,10 @@ jobs:
       - name: Get AKS Credentials
         run: az aks get-credentials --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} --name ${{ secrets.AKS_CLUSTER_NAME }} --overwrite-existing
 
+      - name: Create spring-boot deployment if it doesn't exist
+        run: |
+          kubectl get deployment spring-boot || kubectl apply -f app.yaml
+
       - name: Deploy to AKS
         run: |
           kubectl set image deployment/spring-boot spring-boot=prajuinfo.azurecr.io/spring-boot:latest
