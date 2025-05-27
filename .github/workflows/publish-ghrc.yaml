@@ -25,25 +25,23 @@ jobs:
       - name: Build Spring Boot Application
         run: mvn clean package -DskipTests
 
-      - name: Login to GitHub Container Registry
-        run: echo "${{ secrets.ART_2 }}" | docker login ghcr.io -u prajodh --password-stdin
-
       - name: Build Docker Image
         run: docker build -t spring-boot:latest --file Dockerfile .
 
       - name: Login to Azure Container Registry
-        run: echo "${{ secrets.AZURE }}" | docker login prajuinfo.azurecr.io --username prajuinfo --password-stdin
+        run: echo "${{ secrets.AZURE_ACR_PASSWORD }}" | docker login prajuinfo.azurecr.io --username prajuinfo --password-stdin
 
-      - name: Tag and Push to Azure Container Registry
+      - name: Tag and Push to ACR
         run: |
           docker tag spring-boot:latest prajuinfo.azurecr.io/spring-boot:latest
           docker push prajuinfo.azurecr.io/spring-boot:latest
 
-      - name: Set up Azure CLI
-        uses: azure/cli@v1
-
       - name: Azure Login
-        run: az login --service-principal -u ${{ secrets.AZURE_CLIENT_ID }} -p ${{ secrets.AZURE_CLIENT_SECRET }} --tenant ${{ secrets.AZURE_TENANT_ID }}
+        uses: azure/login@v1
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          client-secret: ${{ secrets.AZURE_CLIENT_SECRET }}
 
       - name: Get AKS Credentials
         run: az aks get-credentials --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} --name ${{ secrets.AKS_CLUSTER_NAME }} --overwrite-existing
@@ -52,4 +50,5 @@ jobs:
         run: |
           kubectl set image deployment/spring-boot spring-boot=prajuinfo.azurecr.io/spring-boot:latest
           kubectl rollout status deployment/spring-boot
+
 
