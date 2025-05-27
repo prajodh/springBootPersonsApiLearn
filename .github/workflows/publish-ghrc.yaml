@@ -22,6 +22,9 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
+      - name: Login to GitHub Container Registry
+        run: echo "${{ secrets.ART_2 }}" | docker login ghcr.io -u prajodh --password-stdin
+        
       - name: Build Spring Boot Application
         run: mvn clean package -DskipTests
 
@@ -29,7 +32,7 @@ jobs:
         run: docker build -t spring-boot:latest --file Dockerfile .
 
       - name: Login to Azure Container Registry
-        run: echo "${{ secrets.AZURE_ACR_PASSWORD }}" | docker login prajuinfo.azurecr.io --username prajuinfo --password-stdin
+        run: echo "${{ secrets.AZURE }}" | docker login prajuinfo.azurecr.io --username prajuinfo --password-stdin
 
       - name: Tag and Push to ACR
         run: |
