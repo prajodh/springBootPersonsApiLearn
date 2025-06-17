@@ -1,73 +1,58 @@
 package com.example.controller;
 
 import java.util.Optional;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import com.example.model.Persons;
 import com.example.service.PersonsService;
 
 import io.swagger.v3.oas.annotations.Operation;
 
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import java.util.List;
-
-
-
-@Controller
+@RestController
 @RequestMapping(path = "v1/persons")
 public class PersonsController {
     @Autowired
     private PersonsService personsService;
 
     @PostMapping
-    @Operation(summary = "api to create a new person record")
-    public @ResponseBody ResponseEntity<Persons> addPersons(@RequestBody Persons person){
-        return ResponseEntity.ok().body(personsService.savePerson(person));
+    @Operation(summary = "API to create a new person record")
+    public ResponseEntity<Persons> addPersons(@RequestBody Persons person){
+        return ResponseEntity.ok().body(personsService.createPerson(person));
     }
 
     @GetMapping("/{id}")
-    @Operation(summary = "api to get a person using their unique")
-    public @ResponseBody ResponseEntity<Persons> getPersonById(@PathVariable Integer id) {
-        Optional<Persons> persons = personsService.findPersonById(id);
-        if (persons.isEmpty()) {
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.ok().body(persons.get());
+    @Operation(summary = "API to get a person using their unique id")
+    public ResponseEntity<Persons> getPersonById(@PathVariable String id) {
+        Optional<Persons> persons = personsService.getPersonById(id);
+        return persons.map(ResponseEntity::ok)
+                      .orElseGet(() -> ResponseEntity.noContent().build());
     }
 
-   @PutMapping("/{id}")
-   @Operation(summary = "api to update a persons record using their unique id")
-   public ResponseEntity<Persons> updatePersonsById(@RequestBody Persons persons,@PathVariable Integer id) {
-       
-       return ResponseEntity.ok().body(personsService.updatePersonById(persons, id));
-   } 
+    @PutMapping("/{id}")
+    @Operation(summary = "API to update a person's record using their unique id")
+    public ResponseEntity<Persons> updatePersonsById(@RequestBody Persons persons, @PathVariable String id) {
+        return ResponseEntity.ok().body(personsService.updatePerson(id, persons));
+    }
 
     @GetMapping
-    @Operation(summary = "api to get all persons")
-    public @ResponseBody ResponseEntity<Page<Persons>> getAllPersons(@RequestParam Integer page, @RequestParam Integer pageSize){
-        return ResponseEntity.ok().body(personsService.findAllPerson(page, pageSize));
+    @Operation(summary = "API to get all persons")
+    public ResponseEntity<List<Persons>> getAllPersons() {
+        return ResponseEntity.ok().body(personsService.getAllPersons());
     }
 
     @DeleteMapping("/{id}")
-    @Operation(summary = "api to delete a person by their unique id")
-    public @ResponseBody ResponseEntity<String> deletePerson(@PathVariable Integer id){
-        return ResponseEntity.ok().body(personsService.deletePerson(id));    
+    @Operation(summary = "API to delete a person by their unique id")
+    public ResponseEntity<Void> deletePerson(@PathVariable String id){
+        personsService.deletePerson(id);
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/above-age")
-    @Operation(summary = "api to get all users above the drinking age")
-    public @ResponseBody ResponseEntity<List<Persons>> getAllAboveAge(){
-        return ResponseEntity.ok().body(personsService.getAllAboveAge());
+    @Operation(summary = "API to get all users above a certain age")
+    public ResponseEntity<List<Persons>> getAllAboveAge(@RequestParam int age){
+        return ResponseEntity.ok().body(personsService.getPersonsAboveAge(age));
     }
 }

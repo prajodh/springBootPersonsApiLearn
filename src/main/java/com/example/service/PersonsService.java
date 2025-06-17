@@ -1,17 +1,14 @@
 package com.example.service;
 
-
-import java.util.Optional;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
-
 import com.example.model.Persons;
 import com.example.repository.PersonsRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Service
 public class PersonsService {
@@ -19,37 +16,49 @@ public class PersonsService {
     @Autowired
     private PersonsRepository personsRepository;
 
-    public Persons savePerson(Persons person){
+    // Create
+    public Persons createPerson(Persons person) {
         return personsRepository.save(person);
     }
 
-    public Optional<Persons> findPersonById(Integer id){
+    // Read all
+    public List<Persons> getAllPersons() {
+        Iterable<Persons> iterable = personsRepository.findAll();
+        return StreamSupport
+                .stream(iterable.spliterator(), false)
+                .collect(Collectors.toList());
+    }
+
+    // Read by ID
+    public Optional<Persons> getPersonById(String id) {
         return personsRepository.findById(id);
     }
 
-    public Page<Persons> findAllPerson(Integer page, Integer pageSize){
-        Pageable pageable = PageRequest.of(pageSize, pageSize);
-        return personsRepository.findAll(pageable);
+    // Update
+    public Persons updatePerson(String id, Persons updatedPerson) {
+        return personsRepository.findById(id)
+            .map(existing -> {
+                if (updatedPerson.getName() != null) {
+                    existing.setName(updatedPerson.getName());
+                }
+                if (updatedPerson.getAge() != null) {
+                    existing.setAge(updatedPerson.getAge());
+                }
+                if (updatedPerson.getSex() != null) {
+                    existing.setSex(updatedPerson.getSex());
+                }
+                return personsRepository.save(existing);
+            })
+            .orElseThrow(() -> new RuntimeException("Person not found with id " + id));
     }
 
-    public String deletePerson(Integer id){
+    // Delete
+    public void deletePerson(String id) {
         personsRepository.deleteById(id);
-        return "Deleted person";
     }
 
-    public List<Persons> getAllAboveAge(){
-        return personsRepository.findAllAboveAge();
-    }
-
-    public Persons updatePersonById(Persons person, Integer id){
-        return personsRepository.findById(id).map(per->{
-            per.setName(person.getName());
-            per.setAge(person.getAge());
-            per.setSex(person.getSex());
-            return personsRepository.save(per);
-        })
-        .orElseGet(()->{
-            return personsRepository.save(person);
-    });
+    // Custom query example
+    public List<Persons> getPersonsAboveAge(int age) {
+        return personsRepository.findByAgeGreaterThan(age);
     }
 }

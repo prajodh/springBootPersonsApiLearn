@@ -12,77 +12,86 @@
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>3.4.5</version>
 	</parent>
-<properties>
-   <docker.image.prefix>prajuinfo.azurecr.io</docker.image.prefix> <!-- Replace with your ACR name -->
-   <java.version>17</java.version>
-   <jib-maven-plugin.version>3.4.0</jib-maven-plugin.version> <!-- Use a modern version to support Java 17 -->
-</properties>
 
-    <dependencies>
-	<dependency>
-		<groupId>org.springframework.boot</groupId>
-		<artifactId>spring-boot-starter-web</artifactId>
-	</dependency>
-	
-      <dependency>
-    <groupId>com.h2database</groupId>
-    <artifactId>h2</artifactId>
-    <scope>runtime</scope>
-</dependency>
+	<properties>
+		<docker.image.prefix>prajuinfo.azurecr.io</docker.image.prefix>
+		<java.version>17</java.version>
+		<jib-maven-plugin.version>3.4.0</jib-maven-plugin.version>
+	</properties>
 
-
-        
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+		</dependency>
+    <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+            <version>2.5.0</version>
+        </dependency>
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
-        </dependency><dependency>
-    <groupId>org.postgresql</groupId>
-    <artifactId>postgresql</artifactId>
-    <scope>runtime</scope>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.32</version>
+            <scope>provided</scope>
+        </dependency>
+    <dependency>
+      <groupId>com.azure</groupId>
+      <artifactId>azure-spring-data-cosmos</artifactId>
+      <version>LATEST</version>
   </dependency>
-  <dependency>
-    <groupId>org.springframework.boot</groupId>
-     <artifactId>spring-boot-starter-data-jpa</artifactId>
-</dependency>
-<dependency>
-   <groupId>org.springdoc</groupId>
-   <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
-   <version>2.5.0</version>
-</dependency>
-</dependencies>
-<build>
-    <plugins>
-      <plugin>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-maven-plugin</artifactId>
-        <version>3.4.5</version>
-        <executions>
-          <execution>
-            <goals>
-              <goal>repackage</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-  <groupId>com.google.cloud.tools</groupId>
-  <artifactId>jib-maven-plugin</artifactId>
-  <version>${jib-maven-plugin.version}</version>
-  <configuration>
-    <from>
-      <image>mcr.microsoft.com/openjdk/jdk:17-ubuntu</image> <!-- Java 17 base image -->
-    </from>
-    <to>
-      <image>${docker.image.prefix}/${project.artifactId}</image>
-    </to>
-    <container>
-      <mainClass>com.example.MyApplication</mainClass> <!-- Replace with your actual main class -->
-    </container>
-  </configuration>
-</plugin>
+	</dependencies>
 
-    </plugins>
-  </build>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<version>3.4.5</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>repackage</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>com.google.cloud.tools</groupId>
+				<artifactId>jib-maven-plugin</artifactId>
+				<version>${jib-maven-plugin.version}</version>
+				<configuration>
+					<from>
+						<image>mcr.microsoft.com/openjdk/jdk:17-ubuntu</image>
+					</from>
+					<to>
+						<image>${docker.image.prefix}/${project.artifactId}</image>
+					</to>
+					<container>
+						<mainClass>com.example.MyApplication</mainClass>
+					</container>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 
 </project>
