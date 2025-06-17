@@ -1,0 +1,12 @@
+Task: Create or update a Spring Data Cosmos repository interface.
+
+Instructions:
+- Extend CosmosRepository<EntityClass, String>.
+- Annotate with @Repository.
+- Add custom query methods if specified by the user.
+
+Input Example:
+User provides an entity class and a repository example.
+
+Output Example:
+<Java repository interface code block>

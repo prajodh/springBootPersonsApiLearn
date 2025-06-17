@@ -1,0 +1,12 @@
+Task: Add Lombok dependency to Maven pom.xml.
+
+Instructions:
+- Insert the Lombok dependency in the <dependencies> section.
+- Use the latest stable version or the version specified by the user.
+- Do not duplicate the dependency if it already exists.
+
+Input Example:
+User asks to add Lombok to pom.xml.
+
+Output Example:
+<dependency snippet for Lombok>

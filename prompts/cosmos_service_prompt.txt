@@ -1,0 +1,14 @@
+Task: Create or update a Spring service class using a Cosmos repository.
+
+Instructions:
+- Use @Service annotation.
+- Autowire the repository.
+- Implement CRUD methods: create, read all, read by id, update, delete.
+- For update, only update fields present in the input.
+- Add custom query methods if specified.
+
+Input Example:
+User provides a repository and a service example.
+
+Output Example:
+<Java service class code block>

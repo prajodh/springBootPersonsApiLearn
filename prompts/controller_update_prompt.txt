@@ -1,0 +1,14 @@
+Task: Update a Spring REST controller to match the service layer.
+
+Instructions:
+- Use @RestController and @RequestMapping.
+- Implement endpoints for create, read by id, update, delete, and custom queries.
+- Ensure all path variables and request parameters match the service method signatures.
+- Use ResponseEntity for responses.
+- Add OpenAPI @Operation annotations if needed.
+
+Input Example:
+User provides a controller and service class.
+
+Output Example:
+<Java controller code block>

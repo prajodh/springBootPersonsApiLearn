@@ -1,0 +1,14 @@
+Task: Fix a Maven pom.xml file.
+
+Instructions:
+- The user will provide a pom.xml file (or snippet).
+- Carefully review the XML for errors, misplaced tags, or formatting issues.
+- Output a corrected version of the pom.xml.
+- Do not change dependencies or plugins unless necessary for correctness.
+- If the main class or artifactId needs clarification, ask the user.
+
+Input Example:
+<user attaches or pastes pom.xml>
+
+Output Example:
+<fixed pom.xml code block>

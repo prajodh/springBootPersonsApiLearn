@@ -1,0 +1,14 @@
+Task: Update a Java entity/model class to work with Azure Cosmos DB.
+
+Instructions:
+- Use Azure Spring Data Cosmos annotations (@Container, @Id, @PartitionKey).
+- Remove JPA-specific annotations.
+- Use String for the id field.
+- Follow the structure and style of the provided reference class.
+- Only include fields specified by the user.
+
+Input Example:
+User provides a reference Cosmos DB model and asks to update their own model.
+
+Output Example:
+<updated Java model code block>

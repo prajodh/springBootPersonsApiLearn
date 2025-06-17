@@ -1,0 +1,12 @@
+Task: Refactor a Java model/entity class to use Lombok.
+
+Instructions:
+- Add @Data and @NoArgsConstructor annotations.
+- Remove explicit getters, setters, and constructors.
+- Ensure Lombok dependency is present in pom.xml.
+
+Input Example:
+User provides a Java model class.
+
+Output Example:
+<refactored Java model code block using Lombok>
