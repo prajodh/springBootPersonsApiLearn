@@ -9,6 +9,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.example.dto.PersonsDto;
+import com.example.mapper.PersonsMapper;
 import com.example.model.Persons;
 import com.example.service.PersonsService;
 
@@ -30,10 +33,13 @@ public class PersonsController {
     @Autowired
     private PersonsService personsService;
 
+    private PersonsMapper personsMapper;
+
     @PostMapping
     @Operation(summary = "api to create a new person record")
-    public @ResponseBody ResponseEntity<Persons> addPersons(@RequestBody Persons person){
-        return ResponseEntity.ok().body(personsService.savePerson(person));
+    public @ResponseBody ResponseEntity<Persons> addPersons(@RequestBody PersonsDto persondto){
+        Persons persons = personsMapper.toEntity(persondto);
+        return ResponseEntity.ok().body(personsService.savePerson(persons));
     }
 
     @GetMapping("/{id}")
